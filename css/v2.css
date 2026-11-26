@@ -32,10 +32,29 @@ header.fixed {
   z-index: 70 !important;
 }
 .v2-drawer {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
   z-index: 60 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  padding-top: calc(env(safe-area-inset-top) + 80px) !important;
+  padding-bottom: max(2.5rem, env(safe-area-inset-bottom)) !important;
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+  box-sizing: border-box !important;
+  background-color: #070707 !important;
 }
 .v2-drawer ul {
   margin: 0 !important;
+  margin-top: auto !important;
   padding: 0 !important;
   list-style: none !important;
   width: 100% !important;

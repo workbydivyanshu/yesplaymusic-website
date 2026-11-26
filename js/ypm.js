@@ -314,14 +314,17 @@
     }
 
     var burger = header.querySelector('button[aria-label="Open menu"],button[aria-label="Close menu"]');
-    var menu = $('.v2 > div.fixed.inset-0');
+    var menu = $('.v2-drawer') || $('.v2 > div.fixed.inset-0');
     function closeMenu() {
       if (!menu) return;
       menu.style.pointerEvents = 'none';
       menu.style.clipPath = 'inset(0 0 100% 0)';
       menu.setAttribute('aria-hidden', 'true');
       if (burger) { burger.setAttribute('aria-label', 'Open menu'); burger.setAttribute('aria-expanded', 'false'); }
-      $$('a', menu).forEach(function (a) { a.tabIndex = -1; });
+      $$('a', menu).forEach(function (a) {
+        a.tabIndex = -1;
+        a.style.transform = 'translateY(105%)';
+      });
     }
     function openMenu() {
       if (!menu) return;
