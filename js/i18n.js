@@ -183,7 +183,16 @@
     "footerAbout": "About",
     "dlReleasesPrefix": "Every binary is published to",
     "dlReleasesLink": "GitHub releases",
-    "dlReleasesSuffix": "and verified with a SHA-256 digest."
+    "dlReleasesSuffix": "and verified with a SHA-256 digest.",
+    "dlMacArm": "Apple Silicon",
+    "dlMacIntel": "Intel",
+    "dlMacPortable": "Portable",
+    "dlCopyCode": "COPY",
+    "dlCopiedCode": "COPIED",
+    "aboutCreditFlowPrefix": "On-device recommendations adapted from",
+    "aboutCreditLyricsPrefix": "Synced lyrics from",
+    "footerSourceOn": "Source on",
+    "drawerLang": "Language"
   },
   "zh-CN": {
     "navFeatures": "功能",
@@ -363,7 +372,16 @@
     "footerAbout": "关于我们",
     "dlReleasesPrefix": "每个发布版本均已在",
     "dlReleasesLink": "GitHub Releases 发布",
-    "dlReleasesSuffix": "，并附带 SHA-256 校验和。"
+    "dlReleasesSuffix": "，并附带 SHA-256 校验和。",
+    "dlMacArm": "Apple 芯片",
+    "dlMacIntel": "英特尔芯片",
+    "dlMacPortable": "免安装版",
+    "dlCopyCode": "复制",
+    "dlCopiedCode": "已复制",
+    "aboutCreditFlowPrefix": "本地推荐算法借鉴自",
+    "aboutCreditLyricsPrefix": "歌词同步数据源自",
+    "footerSourceOn": "源码位于",
+    "drawerLang": "语言"
   }
 };
 

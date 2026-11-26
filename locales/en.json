@@ -176,5 +176,14 @@
   "footerAbout": "About",
   "dlReleasesPrefix": "Every binary is published to",
   "dlReleasesLink": "GitHub releases",
-  "dlReleasesSuffix": "and verified with a SHA-256 digest."
+  "dlReleasesSuffix": "and verified with a SHA-256 digest.",
+  "dlMacArm": "Apple Silicon",
+  "dlMacIntel": "Intel",
+  "dlMacPortable": "Portable",
+  "dlCopyCode": "COPY",
+  "dlCopiedCode": "COPIED",
+  "aboutCreditFlowPrefix": "On-device recommendations adapted from",
+  "aboutCreditLyricsPrefix": "Synced lyrics from",
+  "footerSourceOn": "Source on",
+  "drawerLang": "Language"
 }

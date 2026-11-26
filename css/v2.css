@@ -83,3 +83,10 @@ button[aria-expanded="true"] span > span:first-child {
 button[aria-expanded="true"] span > span:last-child {
   transform: translateY(-5px) rotate(-45deg) !important;
 }
+
+/* CJK typography line-height & tracking balance to prevent vertical glyph overlap */
+html[lang^="zh"] .v2-display {
+  line-height: 1.15 !important;
+  letter-spacing: -0.01em !important;
+}
+
