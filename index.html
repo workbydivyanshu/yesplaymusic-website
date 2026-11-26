@@ -42,7 +42,7 @@
 <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" sizes="180x180" type="image/png"/>
 <link rel="icon" href="assets/favicon.ico" sizes="any"/><link rel="icon" href="assets/brand/favicon-32x32.png" sizes="32x32" type="image/png"/><link rel="icon" href="assets/brand/favicon-16x16.png" sizes="16x16" type="image/png"/><link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png" sizes="180x180" type="image/png"/>
 <style>.v2-lang{display:inline-flex;align-items:center;border-radius:999px;border:1px solid rgba(255,255,255,.15)}.v2-lang-btn{border-radius:999px;padding:.1rem .5rem;color:rgba(255,255,255,.62);transition:color .2s,background-color .2s;font-size:10px;letter-spacing:.12em;text-transform:uppercase;line-height:1.6}.v2-lang-btn:hover{color:#fff}.v2-lang-btn.is-active{color:#fff;background:rgba(255,255,255,.12)}.v2-lang-sep{display:inline-block;height:.7rem;width:1px;background:rgba(255,255,255,.15);margin:0 .1rem}.v2-device-card{transition:background-color .3s}.v2-device-card:hover{background:#0d0d0d}</style><script src="js/i18n.js" defer></script><style id="v2-gallery-style">html,body{overflow-x:clip}
-.v2-gallery-pin{position:relative;height:380vh}
+.v2-gallery-pin{position:relative;height:650vh} /* deep inspection runway */
 .v2-gallery-stage{position:sticky;top:0;height:100svh;overflow:hidden;background:#070707}
 .v2-gallery-hud{position:absolute;top:5rem;left:clamp(1.25rem,6vw,5rem);right:clamp(1.25rem,6vw,5rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:rgba(255,255,255,.5);z-index:20;pointer-events:none}
 .v2-gallery-hud-tag{white-space:nowrap}
@@ -53,7 +53,7 @@
 .v2-gallery-intro-heading{margin:0;font-size:clamp(2.2rem,4.6vw,4.4rem);line-height:.95;letter-spacing:-.04em;white-space:pre-line}
 .v2-gallery-intro-body{margin:1.4rem 0 0;max-width:34ch;font-size:16px;line-height:1.55;color:rgba(255,255,255,.6)}
 .v2-gallery-panel{flex:0 0 auto;display:flex;flex-direction:column;gap:.75rem}
-.v2-window{display:flex;flex-direction:column;width:80vw;max-width:840px;aspect-ratio:16/10;border-radius:16px;overflow:hidden;background:#0e0e11;box-shadow:0 30px 90px -20px rgba(0,0,0,.9);outline:1px solid rgba(255,255,255,.12)}
+.v2-window{display:flex;flex-direction:column;width:80vw;max-width:840px;aspect-ratio:16/10;border-radius:16px;overflow:hidden;background:#0e0e11;box-shadow:0 30px 90px -20px rgba(0,0,0,.9);outline:1px solid rgba(255,255,255,.12);transition:transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;will-change:transform}
 .v2-window-bar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.625rem 1rem;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08)}
 .v2-window-lights{display:flex;align-items:center;gap:.5rem;flex:0 0 auto;width:44px}
 .v2-tl{width:10px;height:10px;border-radius:50%;flex:0 0 auto}

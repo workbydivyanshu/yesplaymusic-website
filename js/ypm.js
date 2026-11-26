@@ -20,10 +20,11 @@
   function initLenis() {
     if (!window.Lenis) return;
     var lenis = new Lenis({
-      duration: 1.4,
-      easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+      duration: 1.9,
+      easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -7 * t)); },
       smoothWheel: true,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 0.55,
+      touchMultiplier: 0.8,
       infinite: false
     });
     function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
@@ -1476,6 +1477,18 @@
     else window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     onScroll();
+
+    var galleryWindows = document.querySelectorAll('.v2-gallery-panel .v2-window');
+    function updateInertia() {
+      if (!window.lenis || !galleryWindows.length) return;
+      var vel = window.lenis.velocity || 0;
+      var skew = Math.max(-1.8, Math.min(1.8, vel * 0.08));
+      var scale = Math.max(0.982, Math.min(1.0, 1 - Math.abs(vel) * 0.0025));
+      for (var i = 0; i < galleryWindows.length; i++) {
+        galleryWindows[i].style.transform = 'skewX(' + (-skew).toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
+      }
+    }
+    if (window.lenis) { window.lenis.on('scroll', updateInertia); }
   }
 
   /* ================================================================== boot */
