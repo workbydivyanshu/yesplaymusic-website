@@ -905,7 +905,8 @@
       items[idx + 1].style.opacity = String(lerp(0.55, 1, fx));
       paint(idx, fv);
       var cur = Math.min(n - 1, Math.round(p * (n - 1)));
-      if (count) count.innerHTML = '03 — Colour<br/>' + pad2(cur + 1) + ' / ' + pad2(n);
+      var palLabel = (window.YPM_I18N && window.YPM_I18N.t('sec3Title')) || '03 — Colour';
+      if (count) count.innerHTML = palLabel + '<br/>' + pad2(cur + 1) + ' / ' + pad2(n);
       card(cur);
     });
   }
