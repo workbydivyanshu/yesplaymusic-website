@@ -1,0 +1,143 @@
+/* ============================================================================
+   YesPlayMusic clone — glue stylesheet.
+   Everything visual lives in the three vendored sheets:
+     fonts.css    self-hosted Mona Sans / JetBrains Mono / Inter @font-face
+     tailwind.css compiled Tailwind v4 output (the site's own stylesheet)
+     v2.css       the hand-written .v2-* component layer
+   This file only adds what the original got from GSAP + a small amount of
+   progressive-enhancement scaffolding. No colour/typography tokens are
+   redefined here on purpose.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- pinning
+   ScrollTrigger's `pin` is replaced by a fixed-position child inside a wrapper
+   whose height carries the pin distance (GSAP `end: "+=NN%"`). JS toggles
+   `.v2-pin-on`; without JS the section just sits in normal flow.             */
+.v2-pin { position: relative; padding-bottom: calc(var(--pin, 0) * 100svh); }
+.v2-pinme.v2-pin-live { position: absolute; top: 0; left: 0; right: 0; }
+.v2-pinme.v2-pin-on { position: fixed; top: 0; left: 0; right: 0; }
+/* Narrow-viewport pin distance for the platform-grid section.
+   The wrapper carries `--pin` as an *inline* declaration, and an inline custom
+   property outranks any author rule regardless of selector — so a plain
+   `.v2-pin-lg { --pin: 1.2 }` media query silently loses, and the old
+   `[style*="--pin:1.6"]` attribute selector additionally stopped matching the
+   moment `initPins()` reserialised the attribute to `--pin: 1.6; …` (with a
+   space). `!important` is the only thing that actually overrides the inline
+   declaration; `.v2-pin-lg` is the stable hook (JS never touches className on
+   the wrapper). This is what took index@390 from 20594px down to 20256px. */
+@media (max-width: 767px) {
+  .v2-pin-lg { --pin: 1.2 !important; }
+}
+
+/* elements GSAP would have set inline before painting ---------------------- */
+.invisible { visibility: hidden; }
+.no-js .invisible, .is-ready .invisible { visibility: visible; }
+
+/* scroll-linked state that only exists while JS is running */
+.v2-hero-veil, .v2-hero-fade, .v2-hero-title { will-change: transform, opacity; }
+.v2-lyric-line { will-change: transform, opacity, filter; }
+.v2-pal-item, .v2-tier { will-change: transform, opacity; }
+.v2-vocals-fill, .v2-lyric-bar { transform: scaleX(1); }
+.v2-lyric-bar { transform: scaleX(0); }
+.v2-vocals-thumb { left: 100%; }
+
+/* hidden-by-default extra rows (accordion / "Show all 51") */
+.v2-dl-more[hidden] { display: none !important; }
+
+/* ------------------------------------------------------- hero cover wall
+   The original paints this wall with a WebGL `CoverWall` (three.js). Its
+   fragment shader is the spec:
+
+     float spot = 1. - smoothstep(uSpot*.15, uSpot, d);
+     float sat  = clamp(uSat + spot + uHover, 0., 1.);
+     col = mix(vec3(dot(col, luma)), col, sat);
+     col *= clamp(uDim + spot*(1.-uDim) + uHover, 0., 1.);
+
+   so the wall rests desaturated and dimmed (uSat = 0, uDim = .26 at hero
+   progress 0) and a mouse-trailed radial glow lifts a disc of it back to
+   full colour and full brightness. `mix(gray, rgb, sat)` has no CSS
+   equivalent for one copy of an image, so the wall is two stacked layers of
+   the same drifting columns: a grayscale + brightness(.26) base, and a
+   full-colour copy the spotlight's radial mask reveals.
+
+   The filter lives on the columns rather than the layer so each column's
+   raster is static and only its transform changes frame to frame. */
+.v2-wall { will-change: transform; }
+.v2-wall-stage { position: absolute; inset: 0; overflow: hidden; will-change: transform; }
+.v2-wall-layer { position: absolute; inset: 0; }
+.v2-wall-base .v2-wall-col { filter: grayscale(1) brightness(0.26); }
+.v2-wall-col {
+  position: absolute; background-repeat: no-repeat; will-change: transform;
+}
+.v2-wall-lit {
+  -webkit-mask-image: radial-gradient(circle var(--spot-r, 300px) at var(--spot-x, 50%) var(--spot-y, 50%), #000 0, #000 var(--spot-c, 45px), transparent 100%);
+          mask-image: radial-gradient(circle var(--spot-r, 300px) at var(--spot-x, 50%) var(--spot-y, 50%), #000 0, #000 var(--spot-c, 45px), transparent 100%);
+}
+/* the tile the shader's raycast is over: full colour, full light, +8% scale */
+.v2-wall-hot { position: absolute; display: none; background-repeat: no-repeat; will-change: transform; }
+.v2-wall-hot.v2-wall-hot-on { display: block; }
+
+/* --------------------------------------------------------- about marquee */
+.v2-about-strip { animation: yesplaymusic-marquee 44s linear infinite; will-change: transform; }
+@keyframes yesplaymusic-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* ------------------------------------------------------- 404 (Next-style) */
+.nf {
+  min-height: 100svh; display: flex; align-items: center; justify-content: center;
+  background: #fff; color: #000; padding: 2rem;
+}
+.nf-row { display: flex; align-items: center; gap: 1.25rem; }
+.nf-code {
+  font: 600 2rem/1 var(--font-mona), -apple-system, system-ui, sans-serif;
+  letter-spacing: -0.04em; padding-right: 1.25rem;
+  border-right: 1px solid #e5e5e5; white-space: nowrap;
+}
+.nf-msg { max-width: 42rem; }
+.nf-title { font: 500 1rem/1.5 var(--font-mona), -apple-system, system-ui, sans-serif; }
+.nf-body { display: none; }
+.nf-link { display: none; }
+@media (max-width: 640px) {
+  .nf-code { font-size: 1.5rem; }
+}
+
+/* --------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .v2-about-strip { animation: none; }
+  .v2-wall-stage { transform: none !important; }
+  .v2-grain { animation: none; }
+  .v2-lw { --p: 112%; }
+  .v2-lyrics { height: auto; min-height: 100svh; }
+  .v2-lyrics .v2-lyric-viewport { overflow: visible; -webkit-mask-image: none; mask-image: none; }
+  .v2-palette .v2-pal-track { padding: 0 10vw; overflow-x: auto; }
+}
+
+/* ------------------------------------------------------------- utilities */
+.copy-flash { background-color: rgba(255, 255, 255, 0.08) !important; }
+.vis-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+/* ============================================================================
+   Enhanced Edition — new body sections (additive; existing craft untouched).
+   Only genuinely new components live here: the language pill, the native
+   desktop cards and the feature-card grid. Everything reuses .v2-* tokens.
+   ========================================================================== */
+
+/* top-nav language switcher pill */
+.v2-lang { display: inline-flex; align-items: center; gap: 2px; height: 2.25rem; padding: 0 2px; border-radius: 999px; background: #ffffff0f; box-shadow: inset 0 0 0 1px #ffffff1f; }
+.v2-lang-btn { appearance: none; border: 0; background: transparent; color: #ffffffa6; font-family: var(--font-jbm), ui-monospace, monospace; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; height: 1.9rem; padding: 0 .55rem; border-radius: 999px; cursor: pointer; transition: background-color .25s, color .25s; }
+.v2-lang-btn:hover { color: #fff; }
+.v2-lang-btn[aria-pressed="true"] { background: var(--v2-paper); color: #000; }
+.v2-lang-btn[aria-pressed="true"]:hover { color: #000; }
+.v2-lang-sep { color: #ffffff33; font-size: 10px; line-height: 1; }
+@media (max-width: 639px) { .v2-nav-open { display: none !important; } }
+
+/* shared card lift for the new grids */
+.v2-lift { transition: transform .5s cubic-bezier(.16,1,.3,1), background-color .3s, box-shadow .3s; }
+.v2-lift:hover { transform: translateY(-4px); }
+
+/* native-desktop + feature cards: smoked-glass surface on hover */
+.v2-fcard, .v2-dcard { position: relative; }
+.v2-fcard:hover { background: #141418; box-shadow: inset 0 0 0 1px #ffffff2b; }
+.v2-dcard:hover { background: #141418; box-shadow: inset 0 0 0 1px #ffffff2b; }

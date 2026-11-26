@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>{{CANONICAL_URL}}/</loc>
+    <image:image>
+      <image:loc>{{CANONICAL_URL}}/assets/brand/og.png</image:loc>
+      <image:title>YesPlayMusic — Premium music, always free</image:title>
+      <image:caption>YesPlayMusic is a beautiful, free music streaming experience.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>{{CANONICAL_URL}}/assets/brand/YesPlayMusicBanner.png</image:loc>
+      <image:title>YesPlayMusic</image:title>
+      <image:caption>The YesPlayMusic brand lockup.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>{{CANONICAL_URL}}/assets/brand/white_logo.png</image:loc>
+      <image:title>YesPlayMusic logo</image:title>
+      <image:caption>The YesPlayMusic mark.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>{{CANONICAL_URL}}/shots/mobile.webp</image:loc>
+      <image:title>YesPlayMusic on a phone</image:title>
+      <image:caption>YesPlayMusic&apos;s mobile home, with shelves built from what you actually play.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>{{CANONICAL_URL}}/shots/desktop.webp</image:loc>
+      <image:title>YesPlayMusic on the web</image:title>
+      <image:caption>Browse and play millions of songs in YesPlayMusic on desktop.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>{{CANONICAL_URL}}/shots/phone.webp</image:loc>
+      <image:title>Now Playing on YesPlayMusic for iPhone</image:title>
+      <image:caption>The native iOS player, coloured by the album and showing synced lyrics.</image:caption>
+    </image:image>
+  </url>
+</urlset>

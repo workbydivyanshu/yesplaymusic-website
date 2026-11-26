@@ -1,0 +1,10 @@
+{
+  "name": "yesplaymusic-website",
+  "version": "3.0.4",
+  "private": true,
+  "scripts": {
+    "build:github": "node build.js github",
+    "build:gitlab": "node build.js gitlab",
+    "build": "node build.js github"
+  }
+}

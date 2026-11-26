@@ -1,0 +1,65 @@
+/* Zero-dependency build: fills {{TOKEN}} placeholders in root *.html files
+ * for the selected target (github | gitlab). Idempotent: safe to run twice. */
+const fs = require('fs');
+const path = require('path');
+const config = require('./site.config.js');
+
+const target = process.argv[2] === 'gitlab' ? 'gitlab' : 'github';
+const t = config[target];
+if (!t) { console.error('Unknown target:', target); process.exit(1); }
+
+const TOKEN = {
+  CANONICAL_URL: t.canonicalUrl,
+  REPO_URL: t.repoUrl,
+  WEBSITE_REPO_URL: t.websiteRepoUrl,
+  RELEASE_BASE_URL: t.releaseBaseUrl,
+  TARGET: t.target,
+  SHOW_RECRUITER: t.showRecruiterLinks ? 'true' : 'false',
+};
+
+const root = __dirname;
+const htmlFiles = fs.readdirSync(root).filter((f) => f.toLowerCase().endsWith('.html'));
+
+let totalReplacements = 0;
+const summary = [];
+
+for (const file of htmlFiles) {
+  const full = path.join(root, file);
+  let src = fs.readFileSync(full, 'utf8');
+  const before = src;
+
+  // Normalise any previously-baked values (either target) back to tokens so a
+  // re-run for a different target still works. Running twice is a no-op.
+  for (const cfg of Object.values(config)) {
+    const map = {
+      CANONICAL_URL: cfg.canonicalUrl,
+      REPO_URL: cfg.repoUrl,
+      WEBSITE_REPO_URL: cfg.websiteRepoUrl,
+      RELEASE_BASE_URL: cfg.releaseBaseUrl,
+    };
+    for (const [key, val] of Object.entries(map)) {
+      if (val) src = src.split(val).join('{{' + key + '}}');
+    }
+  }
+
+  let count = 0;
+  for (const [key, val] of Object.entries(TOKEN)) {
+    const token = '{{' + key + '}}';
+    const parts = src.split(token);
+    count += parts.length - 1;
+    src = parts.join(val);
+  }
+
+  if (src !== before) {
+    fs.writeFileSync(full, src);
+    totalReplacements += count;
+    summary.push(`  ${file}: ${count} placeholder(s) filled`);
+  } else {
+    summary.push(`  ${file}: no change`);
+  }
+}
+
+console.log(`build: target=${target} brand=${t.brandName} badge="${t.badge}"`);
+console.log(`build: ${htmlFiles.length} html file(s) scanned`);
+summary.forEach((l) => console.log(l));
+console.log(`build: done — ${totalReplacements} placeholder(s) replaced`);
