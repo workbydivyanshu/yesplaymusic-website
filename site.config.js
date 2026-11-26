@@ -8,21 +8,9 @@ module.exports = {
     displayRepoUrl: "github.com/workbydivyanshu/YesPlayMusic",
     websiteRepoUrl: "https://github.com/workbydivyanshu/yesplaymusic-website",
     releaseBaseUrl: "https://github.com/workbydivyanshu/YesPlayMusic/releases/download/v3.0.4",
-    canonicalUrl: "https://yesplaymusic.vercel.app",
+    canonicalUrl: "https://yesplaymusic-website.vercel.app",
+    hostedOn: "Vercel",
     analytics: false,
     showRecruiterLinks: true,
-  },
-  gitlab: {
-    target: "gitlab",
-    brandName: "YesPlayMusic",
-    badge: "Enhanced Edition",
-    platformName: "GitLab",
-    repoUrl: "https://gitlab.com/gnsvianca/YesPlayMusic",
-    displayRepoUrl: "gitlab.com/gnsvianca/YesPlayMusic",
-    websiteRepoUrl: "https://gitlab.com/gnsvianca/yesplaymusic-website",
-    releaseBaseUrl: "https://gitlab.com/gnsvianca/YesPlayMusic/-/releases/v3.0.4/downloads",
-    canonicalUrl: "https://yesplaymusic-pages.pages.dev",
-    analytics: false,
-    showRecruiterLinks: false,
   }
 };
