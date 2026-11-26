@@ -43,7 +43,7 @@ for (const file of targetFiles) {
   for (const cfg of Object.values(config)) {
     const entries = [
       ['RELEASE_BASE_URL', cfg.releaseBaseUrl],
-      ['RELEASE_BASE_URL', 'https://github.com/workbydivyanshu/YesPlayMusic/releases/download/v3.0.4'],
+      ['RELEASE_BASE_URL', 'https://github.com/workbydivyanshu/YesPlayMusic/releases/download/v3.0.5'],
       ['WEBSITE_REPO_URL', cfg.websiteRepoUrl],
       ['WEBSITE_REPO_URL', 'https://github.com/workbydivyanshu/yesplaymusic-website'],
       ['WEBSITE_REPO_URL', cfg.websiteRepoUrl ? cfg.websiteRepoUrl.toLowerCase() : null],

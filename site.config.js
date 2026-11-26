@@ -7,7 +7,7 @@ module.exports = {
     repoUrl: "https://github.com/workbydivyanshu/YesPlayMusic",
     displayRepoUrl: "github.com/workbydivyanshu/YesPlayMusic",
     websiteRepoUrl: "https://github.com/workbydivyanshu/yesplaymusic-website",
-    releaseBaseUrl: "https://github.com/workbydivyanshu/YesPlayMusic/releases/download/v3.0.4",
+    releaseBaseUrl: "https://github.com/workbydivyanshu/YesPlayMusic/releases/download/v3.0.5",
     canonicalUrl: "https://yesplaymusic-website.vercel.app",
     hostedOn: "Vercel",
     analytics: false,
