@@ -514,6 +514,48 @@
     return key;
   }
 
+  function copy(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(function () { return fallbackCopy(text); });
+    }
+    return Promise.resolve(fallbackCopy(text));
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;left:-9999px;top:0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    ta.remove();
+    return text;
+  }
+
+  window.copyToClipboard = function (btn, text) {
+    if (!btn) return;
+    copy(text).then(function () {
+      var orig = btn.innerHTML;
+      btn.style.color = '#22c55e';
+      var textEl = btn.querySelector('[data-i18n="dlCopyCode"]');
+      var rawText = btn.textContent ? btn.textContent.trim().toUpperCase() : '';
+      if (textEl || rawText === 'COPY' || rawText === '复制') {
+        var copiedLabel = t('dlCopiedCode') || 'COPIED';
+        if (textEl) {
+          textEl.textContent = copiedLabel;
+        } else {
+          btn.textContent = copiedLabel;
+        }
+      } else {
+        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      }
+      setTimeout(function () {
+        btn.innerHTML = orig;
+        btn.style.color = '';
+      }, 2000);
+    }).catch(function () {});
+  };
+
   var api = {
     lang: lang,
     t: t,

@@ -90,3 +90,11 @@ html[lang^="zh"] .v2-display {
   letter-spacing: -0.01em !important;
 }
 
+/* Compact smartphone header clearance (< 380px) — keeps generous margins, language switcher available in drawer */
+@media (max-width: 379px) {
+  header.fixed .v2-lang {
+    display: none !important;
+  }
+}
+
+
