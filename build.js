@@ -30,15 +30,19 @@ for (const file of htmlFiles) {
 
   // Normalise any previously-baked values (either target) back to tokens so a
   // re-run for a different target still works. Running twice is a no-op.
+  // IMPORTANT: Longer strings MUST be replaced before prefixes (e.g. RELEASE_BASE_URL before REPO_URL)
   for (const cfg of Object.values(config)) {
-    const map = {
-      CANONICAL_URL: cfg.canonicalUrl,
-      REPO_URL: cfg.repoUrl,
-      WEBSITE_REPO_URL: cfg.websiteRepoUrl,
-      RELEASE_BASE_URL: cfg.releaseBaseUrl,
-    };
-    for (const [key, val] of Object.entries(map)) {
-      if (val) src = src.split(val).join('{{' + key + '}}');
+    const entries = [
+      ['RELEASE_BASE_URL', cfg.releaseBaseUrl],
+      ['WEBSITE_REPO_URL', cfg.websiteRepoUrl],
+      ['REPO_URL', cfg.repoUrl],
+      ['CANONICAL_URL', cfg.canonicalUrl],
+    ].filter(([, val]) => Boolean(val));
+
+    entries.sort((a, b) => b[1].length - a[1].length);
+
+    for (const [key, val] of entries) {
+      src = src.split(val).join('{{' + key + '}}');
     }
   }
 
