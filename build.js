@@ -11,6 +11,8 @@ if (!t) { console.error('Unknown target:', target); process.exit(1); }
 const TOKEN = {
   CANONICAL_URL: t.canonicalUrl,
   REPO_URL: t.repoUrl,
+  DISPLAY_REPO_URL: t.displayRepoUrl,
+  PLATFORM_NAME: t.platformName,
   WEBSITE_REPO_URL: t.websiteRepoUrl,
   RELEASE_BASE_URL: t.releaseBaseUrl,
   TARGET: t.target,
@@ -35,8 +37,13 @@ for (const file of htmlFiles) {
     const entries = [
       ['RELEASE_BASE_URL', cfg.releaseBaseUrl],
       ['WEBSITE_REPO_URL', cfg.websiteRepoUrl],
+      ['WEBSITE_REPO_URL', cfg.websiteRepoUrl ? cfg.websiteRepoUrl.toLowerCase() : null],
       ['REPO_URL', cfg.repoUrl],
+      ['REPO_URL', cfg.repoUrl ? cfg.repoUrl.toLowerCase() : null],
+      ['DISPLAY_REPO_URL', cfg.displayRepoUrl],
+      ['DISPLAY_REPO_URL', cfg.displayRepoUrl ? cfg.displayRepoUrl.toLowerCase() : null],
       ['CANONICAL_URL', cfg.canonicalUrl],
+      ['PLATFORM_NAME', cfg.platformName],
     ].filter(([, val]) => Boolean(val));
 
     entries.sort((a, b) => b[1].length - a[1].length);

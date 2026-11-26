@@ -1029,8 +1029,8 @@
       tiers.forEach(function (node, i) { el(i, i ? 0 : 1, i ? 40 : 0); });
       for (var t2 = 1; t2 < tiers.length; t2++) {
         (function (prev, next) {
-          tl.add(prev + 0.65, 0.3, E.none, function (u) { el(prev, 1 - u, -40 * u); });
-          tl.add(next - 0.2, 0.3, E.none, function (u) { el(next, u, 40 * (1 - u)); });
+          tl.add(prev + 0.6, 0.25, E.none, function (u) { el(prev, 1 - u, -40 * u); });
+          tl.add(prev + 0.85, 0.25, E.none, function (u) { el(next, u, 40 * (1 - u)); });
         })(t2 - 1, t2);
       }
       tl.add(3.1, 0.6, E.none, function () {});
@@ -1435,14 +1435,35 @@
     var clock = $('.v2-clock-glyph');
     var pill = clock && clock.closest ? clock.closest('div') : null;
     var footer = $('footer');
-    if (!pill || !footer || !window.IntersectionObserver) return;
+    var gallery = $('.v2-gallery-pin');
+    var hero = $('.v2-hero');
+    if (!pill || !window.IntersectionObserver) return;
     pill.style.transition = 'opacity .45s ease, visibility .45s ease';
-    new IntersectionObserver(function (entries) {
-      var over = entries[0].isIntersecting;
-      pill.style.opacity = over ? '0' : '';
-      pill.style.visibility = over ? 'hidden' : '';
-      pill.style.pointerEvents = over ? 'none' : '';
-    }, { threshold: 0.01 }).observe(footer);
+    var inFooter = false, inGallery = false, inHero = false;
+    function update() {
+      var hide = inFooter || inGallery || inHero;
+      pill.style.opacity = hide ? '0' : '1';
+      pill.style.visibility = hide ? 'hidden' : 'visible';
+      pill.style.pointerEvents = hide ? 'none' : '';
+    }
+    if (footer) {
+      new IntersectionObserver(function (entries) {
+        inFooter = entries[0].isIntersecting;
+        update();
+      }, { threshold: 0.01 }).observe(footer);
+    }
+    if (gallery) {
+      new IntersectionObserver(function (entries) {
+        inGallery = entries[0].isIntersecting;
+        update();
+      }, { threshold: 0.01 }).observe(gallery);
+    }
+    if (hero) {
+      new IntersectionObserver(function (entries) {
+        inHero = entries[0].isIntersecting;
+        update();
+      }, { threshold: 0.15 }).observe(hero);
+    }
   }
 
   /* ====================================================== HORIZONTAL GALLERY */
