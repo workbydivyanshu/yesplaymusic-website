@@ -2,3 +2,5 @@ node_modules/
 
 # wrangler dev state
 worker/.wrangler/
+.vercel
+.wrangler/

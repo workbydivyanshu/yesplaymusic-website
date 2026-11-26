@@ -1021,7 +1021,7 @@
     var sm = smoother(0.5);
     onScroll(function (dt) {
       prog = sm(pinProgress(pin), dt);
-      if (!RM) tl.seek(prog);
+      if (!RM) tl.seek(prog * 3.7);
       var a = 0;
       for (var ti = 1; ti < tierOp.length; ti++) if (tierOp[ti] > tierOp[a]) a = ti;
       if (a !== active) {
