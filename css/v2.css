@@ -25,3 +25,42 @@
 @media (max-width: 1023px) {
   button.lg\:hidden, div.lg\:hidden { display: grid !important; }
 }
+
+
+/* Mobile Drawer & Header Stacking */
+header.fixed {
+  z-index: 70 !important;
+}
+.v2-drawer {
+  z-index: 60 !important;
+}
+.v2-drawer ul {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.v2-drawer li {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.v2-drawer a.v2-display {
+  font-size: clamp(1.8rem, 8vw, 3rem) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.03em !important;
+  width: auto !important;
+  max-width: 100% !important;
+  word-break: break-word !important;
+  transform-origin: left center;
+}
+
+/* Hamburger to X animation */
+button[aria-expanded="true"] span > span:first-child {
+  transform: translateY(5px) rotate(45deg) !important;
+}
+button[aria-expanded="true"] span > span:last-child {
+  transform: translateY(-5px) rotate(-45deg) !important;
+}

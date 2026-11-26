@@ -21,12 +21,19 @@ const TOKEN = {
 
 const root = __dirname;
 const htmlFiles = fs.readdirSync(root).filter((f) => f.toLowerCase().endsWith('.html'));
+const targetFiles = [
+  ...htmlFiles,
+  'locales/en.json',
+  'locales/zh-CN.json',
+  'js/i18n.js',
+];
 
 let totalReplacements = 0;
 const summary = [];
 
-for (const file of htmlFiles) {
+for (const file of targetFiles) {
   const full = path.join(root, file);
+  if (!fs.existsSync(full)) continue;
   let src = fs.readFileSync(full, 'utf8');
   const before = src;
 
@@ -71,6 +78,6 @@ for (const file of htmlFiles) {
 }
 
 console.log(`build: target=${target} brand=${t.brandName} badge="${t.badge}"`);
-console.log(`build: ${htmlFiles.length} html file(s) scanned`);
+console.log(`build: ${targetFiles.length} file(s) scanned`);
 summary.forEach((l) => console.log(l));
 console.log(`build: done — ${totalReplacements} placeholder(s) replaced`);

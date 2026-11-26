@@ -1431,6 +1431,19 @@
     return text;
   }
 
+  window.copyToClipboard = function (btn, text) {
+    copy(text).then(function () {
+      if (!btn) return;
+      var orig = btn.innerHTML;
+      btn.style.color = '#22c55e';
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      setTimeout(function () {
+        btn.innerHTML = orig;
+        btn.style.color = '';
+      }, 2000);
+    }).catch(function () {});
+  };
+
   /* ============================================================ PILL FADE */
   function initPillFade() {
     var clock = $('.v2-clock-glyph');
