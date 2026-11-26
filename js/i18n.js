@@ -61,7 +61,19 @@
       step2Title: "Sign in to your account",
       step2Body: "Log in with your NetEase Cloud Music account to bring your playlists and favorites along.",
       step3Title: "Press play",
-      step3Body: "Browse, search and listen in lossless quality — everything else stays out of your way."
+      step3Body: "Browse, search and listen in lossless quality — everything else stays out of your way.",
+      galleryHudTag: "Audiophile Core · 24-Bit / 96kHz FLAC",
+      galleryHudTitle: "05 — Desktop Showcase",
+      galleryIntroTag: "Visuals",
+      galleryIntroHeading: "The whole player,<br/>unfolded.",
+      galleryIntroBody: "A native Flutter desktop app engineered with care. From 3D Coverflow to syllable-timed karaoke lyrics, local music parsing, and sandboxed media servers.",
+      galleryRulerHint: "Scroll to Explore",
+      panel01Title: "Discovery & Charts",
+      panel02Title: "Dynamic Lyrics Stage",
+      panel03Title: "Cinematic 3D Coverflow",
+      panel04Title: "Record Shelf Spines",
+      panel05Title: "Local Audio Core",
+      panel06Title: "Album & Vinyl Art"
     },
     'zh-CN': {
       navFeatures: "功能",
@@ -119,7 +131,19 @@
       step2Title: "登录你的账号",
       step2Body: "使用网易云音乐账号登录，带上你的歌单与收藏。",
       step3Title: "开始播放",
-      step3Body: "浏览、搜索并以无损音质聆听——其余一切都不再打扰你。"
+      step3Body: "浏览、搜索并以无损音质聆听——其余一切都不再打扰你。",
+      galleryHudTag: "发烧级音频内核 · 24-Bit / 96kHz 无损",
+      galleryHudTitle: "05 — 桌面端交互全貌",
+      galleryIntroTag: "视觉与质感",
+      galleryIntroHeading: "每一个界面，<br/>精雕细琢。",
+      galleryIntroBody: "基于 Flutter 原生构建的高颜值音乐播放器。从 3D Coverflow 到逐字卡拉OK动效歌词、本地媒体库与插件流媒体支持。",
+      galleryRulerHint: "滚动探索",
+      panel01Title: "探索与推荐歌单",
+      panel02Title: "动态歌词全屏视窗",
+      panel03Title: "沉浸式 3D Coverflow",
+      panel04Title: "唱片架黑胶书脊",
+      panel05Title: "本地音乐文件引擎",
+      panel06Title: "专辑详情与黑胶徽标"
     }
   };
 
@@ -158,6 +182,31 @@
     }
   }
 
+  function setShotSrc(img, target, fallback) {
+    if (img.getAttribute('src') === target) return;
+    if (target !== fallback) {
+      img.onerror = function () {
+        img.onerror = null;
+        img.src = fallback;
+      };
+    } else {
+      img.onerror = null;
+    }
+    img.setAttribute('src', target);
+  }
+
+  function swapLocalized() {
+    var imgs = document.querySelectorAll('img[data-localized]');
+    for (var i = 0; i < imgs.length; i++) {
+      var img = imgs[i];
+      var base = img.getAttribute('data-localized');
+      if (!base) continue;
+      var fallback = 'assets/' + base;
+      var target = lang === 'en' ? 'assets/shots/en/' + base.replace(/^shots\//, '') : fallback;
+      setShotSrc(img, target, fallback);
+    }
+  }
+
   function apply() {
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
@@ -179,6 +228,7 @@
       if (on) btns[j].classList.add('is-active'); else btns[j].classList.remove('is-active');
     }
     swapShots();
+    swapLocalized();
   }
 
   function enhance(l) {

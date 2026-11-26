@@ -54,5 +54,17 @@
   "step2Title": "Sign in to your account",
   "step2Body": "Log in with your NetEase Cloud Music account to bring your playlists and favorites along.",
   "step3Title": "Press play",
-  "step3Body": "Browse, search and listen in lossless quality — everything else stays out of your way."
+  "step3Body": "Browse, search and listen in lossless quality — everything else stays out of your way.",
+  "galleryHudTag": "Audiophile Core · 24-Bit / 96kHz FLAC",
+  "galleryHudTitle": "05 — Desktop Showcase",
+  "galleryIntroTag": "Visuals",
+  "galleryIntroHeading": "The whole player,<br/>unfolded.",
+  "galleryIntroBody": "A native Flutter desktop app engineered with care. From 3D Coverflow to syllable-timed karaoke lyrics, local music parsing, and sandboxed media servers.",
+  "galleryRulerHint": "Scroll to Explore",
+  "panel01Title": "Discovery & Charts",
+  "panel02Title": "Dynamic Lyrics Stage",
+  "panel03Title": "Cinematic 3D Coverflow",
+  "panel04Title": "Record Shelf Spines",
+  "panel05Title": "Local Audio Core",
+  "panel06Title": "Album & Vinyl Art"
 }

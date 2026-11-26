@@ -29,6 +29,7 @@
     function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
     requestAnimationFrame(raf);
     lenis.on('scroll', function () { if (window.ScrollTrigger) ScrollTrigger.update(); });
+    window.lenis = lenis;
   }
 
   /* ---------------------------------------------------------------- utils */
@@ -1443,10 +1444,45 @@
     }, { threshold: 0.01 }).observe(footer);
   }
 
+  /* ====================================================== HORIZONTAL GALLERY */
+  function initHorizontalGallery() {
+    if (RM) return;
+    var pin = $('.v2-gallery-pin');
+    var track = $('.v2-gallery-track');
+    if (!pin || !track) return;
+    var rulerTrack = $('.v2-ruler-track');
+    var counter = $('.v2-gallery-counter');
+    var panels = $$('.v2-gallery-panel');
+
+    function onScroll() {
+      var rect = pin.getBoundingClientRect();
+      var totalScroll = pin.offsetHeight - window.innerHeight;
+      var prog = totalScroll > 0 ? clamp(-rect.top / totalScroll, 0, 1) : 0;
+      var maxTrackX = track.scrollWidth - window.innerWidth;
+      track.style.transform = 'translate3d(' + (-prog * maxTrackX) + 'px,0,0)';
+      if (rulerTrack) rulerTrack.style.transform = 'translate3d(' + ((prog - 0.5) * 140 * 0.3) + 'px,0,0)';
+      if (counter && panels.length) {
+        var vc = window.innerWidth / 2, best = 0, bestD = Infinity;
+        for (var i = 0; i < panels.length; i++) {
+          var r = panels[i].getBoundingClientRect();
+          var d = Math.abs((r.left + r.width / 2) - vc);
+          if (d < bestD) { bestD = d; best = i; }
+        }
+        counter.textContent = pad2(best + 1);
+      }
+    }
+
+    if (window.lenis) window.lenis.on('scroll', onScroll);
+    else window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
+  }
+
   /* ================================================================== boot */
   function boot() {
     root.classList.add('is-ready');
     initLenis();
+    initHorizontalGallery();
     initPins();
     initNav();
     initAnchors();
