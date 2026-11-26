@@ -15,6 +15,22 @@
   var doc = document, root = doc.documentElement;
   var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* Cinematic smooth scroll — Lenis, when the vendor bundle is present.
+     No-ops cleanly if js/vendor/lenis.min.js was not loaded. */
+  function initLenis() {
+    if (!window.Lenis) return;
+    var lenis = new Lenis({
+      duration: 1.4,
+      easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+      smoothWheel: true,
+      touchMultiplier: 1.5,
+      infinite: false
+    });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+    lenis.on('scroll', function () { if (window.ScrollTrigger) ScrollTrigger.update(); });
+  }
+
   /* ---------------------------------------------------------------- utils */
   function $(s, r) { return (r || doc).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || doc).querySelectorAll(s)); }
@@ -1059,52 +1075,40 @@
     reveals(sec, '.v2-track-row', { y: 50, duration: 1000, stagger: 0, rootMargin: '0px 0px -8% 0px' });
     reveals(sec, '.v2-track-rule', { scaleX: 0, duration: 1400, rootMargin: '0px 0px -8% 0px' });
 
-    var card = $('.pointer-events-none.fixed.left-0.top-0', sec);
-    var imgs = card ? $$('img', card) : [];
-    var px = 0, py = 0, tx = 0, ty = 0, cur = -1, inside = false;
+    /* Radiant note ripple: each row's note indicator (C01 … C'08) flashes the
+       purple→pink gradient and plays its own chime on hover / click. */
+    function noteRipple(note) {
+      if (!note) return;
+      if (note._ripple && note._ripple.cancel) note._ripple.cancel();
+      note.style.backgroundImage = 'linear-gradient(135deg, #a855f7, #ec4899)';
+      note.style.backgroundSize = '200% 200%';
+      note.style.borderRadius = '7px';
+      if (!note.animate) return;
+      var a = note.animate([
+        { backgroundPosition: '0% 50%', boxShadow: '0 0 0 0 rgba(168,85,247,0)' },
+        { backgroundPosition: '100% 50%', boxShadow: '0 0 20px 5px rgba(236,72,153,0.65)' },
+        { backgroundPosition: '0% 50%', boxShadow: '0 0 0 0 rgba(168,85,247,0)' }
+      ], { duration: 950, easing: 'cubic-bezier(.16,1,.3,1)' });
+      note._ripple = a;
+      a.onfinish = function () {
+        if (note._ripple !== a) return;
+        note.style.backgroundImage = '';
+        note.style.backgroundSize = '';
+        note.style.boxShadow = '';
+        note._ripple = null;
+      };
+    }
 
-    function move(x, y) {
-      tx = x + 28; ty = y - 120;
-      px += (tx - px) * 0.18; py += (ty - py) * 0.18;
-      if (card) { card.style.transform = 'translate3d(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px,0)'; }
-    }
-    function show(i) {
-      if (!card || i === cur) return;
-      cur = i;
-      if (i < 0) {
-        card.style.transition = 'opacity .25s ease-in, transform .25s ease-in';
-        card.style.opacity = '0';
-        card.style.pointerEvents = 'none';
-        return;
-      }
-      var f = FEATURES[i];
-      card.style.width = f.wide ? '380px' : '220px';
-      card.style.transition = 'opacity .4s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1), width .3s';
-      card.style.opacity = '1';
-      imgs.forEach(function (im, k) {
-        im.className = 'w-full object-cover transition-opacity duration-300 ' +
-          (f.aspect === 'square' ? 'aspect-square' : f.aspect === '16/10' ? 'aspect-[16/10]' : 'aspect-[9/19.5] object-top') +
-          (k === i ? ' relative opacity-100' : ' absolute inset-0 opacity-0');
-      });
-    }
-    if (card) {
-      card.style.opacity = '0';
-      window.addEventListener('pointermove', function (e) {
-        if (e.pointerType && e.pointerType !== 'mouse') return;
-        if (!inside) return;
-        move(e.clientX, e.clientY);
-        var row = doc.elementFromPoint(e.clientX, e.clientY);
-        row = row && row.closest ? row.closest('.v2-track-row') : null;
-        var idx = (row && sec.contains(row)) ? Number(row.dataset.i) : -1;
-        if (idx !== cur && idx >= 0 && Audio_.isHoverSound()) Audio_.playNote(Audio_.WHITE[idx], 0.55);
-        show(idx);
-      }, { passive: true });
-      if (window.IntersectionObserver) {
-        new IntersectionObserver(function (en) { inside = en[0].isIntersecting; if (!inside) show(-1); }).observe(sec);
-      }
-    }
     $$('.v2-track-row', sec).forEach(function (row) {
-      row.addEventListener('click', function () { Audio_.playNote(Audio_.WHITE[Number(row.dataset.i)], 0.7); });
+      var note = $('.v2-mono', row);
+      var idx = Number(row.dataset.i);
+      function chime() { Audio_.playNote(Audio_.WHITE[idx], 0.7); }
+      row.addEventListener('click', function () { chime(); noteRipple(note); });
+      row.addEventListener('pointerenter', function (e) {
+        if (e.pointerType && e.pointerType !== 'mouse') return;
+        if (Audio_.isHoverSound()) chime();
+        noteRipple(note);
+      });
     });
   }
 
@@ -1424,9 +1428,25 @@
     return text;
   }
 
+  /* ============================================================ PILL FADE */
+  function initPillFade() {
+    var clock = $('.v2-clock-glyph');
+    var pill = clock && clock.closest ? clock.closest('div') : null;
+    var footer = $('footer');
+    if (!pill || !footer || !window.IntersectionObserver) return;
+    pill.style.transition = 'opacity .45s ease, visibility .45s ease';
+    new IntersectionObserver(function (entries) {
+      var over = entries[0].isIntersecting;
+      pill.style.opacity = over ? '0' : '';
+      pill.style.visibility = over ? 'hidden' : '';
+      pill.style.pointerEvents = over ? 'none' : '';
+    }, { threshold: 0.01 }).observe(footer);
+  }
+
   /* ================================================================== boot */
   function boot() {
     root.classList.add('is-ready');
+    initLenis();
     initPins();
     initNav();
     initAnchors();
@@ -1440,6 +1460,7 @@
     initJoin();
     initFooter();
     initClock();
+    initPillFade();
     if (sec0IsAbout()) initAbout();
     if ($('.v2-dl-hero')) initDownload();
     if (document.fonts && document.fonts.ready) {
